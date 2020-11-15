@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# Rainbow - Study
-=======
 # Rainbow - RPi
->>>>>>> 5cbe54ff43b3a97ec3f92a9be9b7bebdfa3b218f
 
 ## Project Explanation
 ### 1. 초음파 센서
