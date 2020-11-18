@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <wiringPi.h>
 #include <softTone.h>
+#include <time.h>
+#include "parson.h"
 // 각 FND와 연결된 라즈베리파이 핀(S0, S1, …, S5)
 const int FndSelectPin[6] = {4, 17, 18, 27, 22, 23};
 // FND의 LED와 연결된 라즈베리파이 핀(A, B, …, H)
@@ -92,8 +94,25 @@ void FndDisplay(int position, int num) {
 int main()
 {
     double f1, f2, f3, f4, f5;
-    int i, pos, time;
+    int i, pos, now, s_data;
     int data[6] = {0, 0, 0, 0, 0, 0}; // 출력할 문자 데이터
+    s_data = 0;
+
+    JSON_Value *rootValue;
+    JSON_Object *rootObject;
+
+    rootValue = json_value_init_object();             // JSON_Value 생성 및 초기화
+    rootObject = json_value_get_object(rootValue);    // JSON_Value에서 JSON_Object를 얻음
+
+    // 오늘 날짜 구하기
+    time_t tnow;
+    struct tm* t;
+    time(&tnow);
+    t = (struct tm*) localtime(&tnow);
+
+    char today[10];
+    sprintf(today, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
+
     Init();
 
     while (1) {
@@ -132,6 +151,13 @@ int main()
                 softToneWrite(BP, melody[0]);
                 delay(250);
                 softToneWrite(BP, 0);
+
+                // 객체에 키를 추가하고 공부날짜 저장
+                json_object_set_string(rootObject, "Study_date", today);
+                // 객체에 키를 추가하고 공부시간 저장
+                json_object_set_number(rootObject, "Study_time", s_data);
+                // JSON_Value를 사람이 읽기 쉬운 문자열(pretty)로 만든 뒤 파일에 저장
+                json_serialize_to_file_pretty(rootValue, "Study.json");
             }
         }
 
@@ -149,14 +175,15 @@ int main()
                     data[i] = 0;
                 }
             }
-            time = millis();
-            while (millis() - time < 1000) {
+            now = millis();
+            while (millis() - now < 1000) {
                 for (pos = 0; pos < 6; pos++) {
                     FndDisplay(pos, data[pos]);
                     delay(1);
                 }
             }
             data[0]++;
+            s_data++;
         }
     }
     return 0;
