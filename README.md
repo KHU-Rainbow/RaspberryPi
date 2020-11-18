@@ -45,7 +45,7 @@ gpio -v
 ```
 - **Compile RPi.c and Execute**
 ```
-gcc -o study study.c -lwiringPi
+make
 ./study
 ```
 - **crontab을 통해 매일 0시 0분에 AWS RDS와 연동**
