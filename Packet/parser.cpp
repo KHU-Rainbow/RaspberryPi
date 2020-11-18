@@ -63,7 +63,6 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
         static int cnt = 0;
         cnt++;
         printf("%3d Probe Request=============================================\n", cnt);
-        //LEDControl();
 
         char device_mac[17]; // enough size
         //%02X : 2 hex code 
@@ -77,7 +76,6 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
             if(BuzzerFlag == 1){
                 printf("BuzzerFlag is 1");
             }
-            //LEDControl();
             //Send Data to Cloud Service 
             //~~
         }
@@ -116,9 +114,6 @@ int BuzzerControl(int flag){
         delay(200);
         softToneWrite(BP, 0);
         delay(50);
-        softToneWrite(BP, melody[6]);
-        delay(200);
-        softToneWrite(BP, 0);
     }
     return 0;
 }

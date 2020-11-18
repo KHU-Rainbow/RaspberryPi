@@ -45,8 +45,8 @@ gpio -v
 ```
 - **Compile RPi.c and Execute**
 ```
-<<<<<<< HEAD
 gcc -o study study.c -lwiringPi
+./study
 ```
 
 # Rainbow - Packet
@@ -78,11 +78,6 @@ source ./dependencies.sh
 sudo apt-get install libpcap0.8-dev
 make
 sudo ./packet <interface> <mac address>
-sudo ./packet wlan0 aa:bb:cc:dd:ee:ff
+sudo ./packet wlan1 50:50:A4:0E:16:90
 ```
 <img src="https://user-images.githubusercontent.com/58834907/97774846-a0b60c00-1b9e-11eb-8aa7-966a3d615e45.PNG" width="90%"></img>
-=======
-gcc -o RPi.c RPi -lwringPi
-./RPi
-```
->>>>>>> 5cbe54ff43b3a97ec3f92a9be9b7bebdfa3b218f

@@ -91,36 +91,48 @@ void FndDisplay(int position, int num) {
 
 int main()
 {
-    double fDistance;
+    double f1, f2, f3, f4, f5;
     int i, pos, time;
     int data[6] = {0, 0, 0, 0, 0, 0}; // 출력할 문자 데이터
     Init();
 
     while (1) {
-        fDistance = getDistance();
-
+        f1 = getDistance();
+        delay(1);
+        f2 = getDistance();
+        delay(1);
+        f3 = getDistance();
+        delay(1); 
+        f4 = getDistance();
+        delay(1);
+        f5 = getDistance();
+        
         // 초음파 센서 감지, 버튼 딩동댕
-        if (fDistance < 25.0 && is_sit == 0) {
-            is_sit = 1;
-            softToneWrite(BP, melody[0]);
-            delay(250);
-            softToneWrite(BP, melody[2]);
-            delay(250);
-            softToneWrite(BP, melody[4]);
-            delay(250);
-            softToneWrite(BP, 0);
+        if(is_sit == 0){
+            if (f1 < 30.0 || f2 < 30.0 || f3 < 30.0 || f4 < 30.0 || f5 < 30.0) {
+                is_sit = 1;
+                softToneWrite(BP, melody[0]);
+                delay(250);
+                softToneWrite(BP, melody[2]);
+                delay(250);
+                softToneWrite(BP, melody[4]);
+                delay(250);
+                softToneWrite(BP, 0);
+            }
         }
 
         // 초음파 센서 감지, 버튼 댕동딩
-        else if (fDistance > 30.0 && is_sit == 1) {
-            is_sit = 0;
-            softToneWrite(BP, melody[4]);
-            delay(250);
-            softToneWrite(BP, melody[2]);
-            delay(250);
-            softToneWrite(BP, melody[0]);
-            delay(250);
-            softToneWrite(BP, 0);
+        else if (is_sit == 1){
+            if (f1 > 30.0 && f2 > 30.0 && f3 > 30.0 & f4 > 30.0 && f5 > 30.0) {
+                is_sit = 0;
+                softToneWrite(BP, melody[4]);
+                delay(250);
+                softToneWrite(BP, melody[2]);
+                delay(250);
+                softToneWrite(BP, melody[0]);
+                delay(250);
+                softToneWrite(BP, 0);
+            }
         }
 
         // FND
@@ -138,19 +150,13 @@ int main()
                 }
             }
             time = millis();
-            while (millis() - time < 994) {         // 밑에 Delay 되는 6만큼 보정
+            while (millis() - time < 1000) {
                 for (pos = 0; pos < 6; pos++) {
                     FndDisplay(pos, data[pos]);
                     delay(1);
                 }
             }
             data[0]++;
-        }
-        else {
-            for (pos = 0; pos < 6; pos++) {
-                FndDisplay(pos, data[pos]);
-                delay(1);
-            }
         }
     }
     return 0;
