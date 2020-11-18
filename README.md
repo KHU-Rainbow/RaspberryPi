@@ -48,6 +48,8 @@ gpio -v
 gcc -o study study.c -lwiringPi
 ./study
 ```
+- crontab을 통해 매일 0시 0분에 AWS RDS와 연동
+<img src="https://user-images.githubusercontent.com/20378368/99489838-f31f6700-29ab-11eb-8629-e8a91411307d.PNG" width="90%"></img>
 
 # Rainbow - Packet
 
@@ -81,3 +83,38 @@ sudo ./packet <interface> <mac address>
 sudo ./packet wlan1 50:50:A4:0E:16:90
 ```
 <img src="https://user-images.githubusercontent.com/58834907/97774846-a0b60c00-1b9e-11eb-8aa7-966a3d615e45.PNG" width="90%"></img>
+
+
+- parser.cpp 내부의 curl을 이용해 감지될 때마다 AWS RDS와 연동
+```
+CURL *curl;
+CURLcode res;
+
+std::string strTargetURL;
+std::string strResourceJSON;
+std::string s_today(today);
+
+struct curl_slist *headerlist = nullptr;
+headerlist = curl_slist_append(headerlist, "Content-Type: application/json");
+
+strTargetURL = "https://r89kbtj8x9.execute-api.us-east-1.amazonaws.com/dev/rainbow-post-detect";
+strResourceJSON = "{\"Packet_date\": \"" + s_today + "\", " + "\"Packet_time\": \"" + std::to_string(p_data) +"\"}";
+
+curl_global_init(CURL_GLOBAL_ALL);
+curl = curl_easy_init();
+
+if (curl)
+{
+    curl_easy_setopt(curl, CURLOPT_URL, strTargetURL.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, strResourceJSON.c_str());
+    
+    res = curl_easy_perform(curl);
+    
+    curl_easy_cleanup(curl);
+    curl_slist_free_all(headerlist);
+}
+```

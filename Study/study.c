@@ -111,7 +111,9 @@ int main()
     t = (struct tm*) localtime(&tnow);
 
     char today[10];
+    char tomorrow[10];
     sprintf(today, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
+    sprintf(tomorrow, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday + 1);
 
     Init();
 
@@ -162,7 +164,15 @@ int main()
                 printf("\nSTUDY_TIME: %d\n\n", s_data);
 
                 // JSON_Value를 사람이 읽기 쉬운 문자열(pretty)로 만든 뒤 파일에 저장
-                json_serialize_to_file_pretty(rootValue, "Study.json");
+                json_serialize_to_file_pretty(rootValue, "today.json");
+
+                // 객체에 키를 추가하고 공부날짜 저장
+                json_object_set_string(rootObject, "Study_date", tomorrow);
+                // 객체에 키를 추가하고 공부시간 저장
+                json_object_set_number(rootObject, "Study_time", 0);
+
+                // JSON_Value를 사람이 읽기 쉬운 문자열(pretty)로 만든 뒤 파일에 저장
+                json_serialize_to_file_pretty(rootValue, "tomorrow.json");
             }
         }
 

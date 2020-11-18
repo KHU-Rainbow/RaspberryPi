@@ -77,6 +77,7 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
             if(BuzzerFlag == 1){
                 printf("BuzzerFlag is 1");
             }
+
             // 오늘 날짜 구하기
             time_t tnow;
             struct tm* t;
@@ -88,9 +89,40 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
             sprintf(today, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
             p_data = t->tm_hour * 3600 + t->tm_min * 60 + t->tm_sec;
 
-            //Send Data to Cloud Service
             printf("\nDETECT_DATE: %s", today);
             printf("\nDETECT_TIME: %d\n\n", p_data);
+
+            //Send Data to Cloud Service
+            CURL *curl;
+            CURLcode res;
+
+            std::string strTargetURL;
+            std::string strResourceJSON;
+            std::string s_today(today);
+
+            struct curl_slist *headerlist = nullptr;
+            headerlist = curl_slist_append(headerlist, "Content-Type: application/json");
+
+            strTargetURL = "https://r89kbtj8x9.execute-api.us-east-1.amazonaws.com/dev/rainbow-post-detect";
+            strResourceJSON = "{\"Packet_date\": \"" + s_today + "\", " + "\"Packet_time\": \"" + std::to_string(p_data) +"\"}";
+            
+            curl_global_init(CURL_GLOBAL_ALL);
+            curl = curl_easy_init();
+           
+            if (curl)
+            {
+                curl_easy_setopt(curl, CURLOPT_URL, strTargetURL.c_str());
+                curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headerlist);
+                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);
+                curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, false);
+                curl_easy_setopt(curl, CURLOPT_POST, 1L);
+                curl_easy_setopt(curl, CURLOPT_POSTFIELDS, strResourceJSON.c_str());
+                
+                res = curl_easy_perform(curl);
+                
+                curl_easy_cleanup(curl);
+                curl_slist_free_all(headerlist);
+            }
         }
 
         int rssi = 0;
