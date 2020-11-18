@@ -4,6 +4,7 @@
 #include <chrono>
 #include <curl/curl.h>
 #include <softTone.h>
+#include <time.h>
 
 #define LOW 0
 #define HIGH 1
@@ -76,8 +77,20 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
             if(BuzzerFlag == 1){
                 printf("BuzzerFlag is 1");
             }
-            //Send Data to Cloud Service 
-            //~~
+            // 오늘 날짜 구하기
+            time_t tnow;
+            struct tm* t;
+            time(&tnow);
+            t = (struct tm*) localtime(&tnow);
+
+            char today[10];
+            int p_data;
+            sprintf(today, "%04d-%02d-%02d", t->tm_year + 1900, t->tm_mon + 1, t->tm_mday);
+            p_data = t->tm_hour * 3600 + t->tm_min * 60 + t->tm_sec;
+
+            //Send Data to Cloud Service
+            printf("\nDETECT_DATE: %s", today);
+            printf("\nDETECT_TIME: %d\n\n", p_data);
         }
 
         int rssi = 0;
