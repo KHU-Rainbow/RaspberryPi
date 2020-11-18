@@ -48,7 +48,7 @@ gpio -v
 gcc -o study study.c -lwiringPi
 ./study
 ```
-- crontab을 통해 매일 0시 0분에 AWS RDS와 연동
+- **crontab을 통해 매일 0시 0분에 AWS RDS와 연동**
 <img src="https://user-images.githubusercontent.com/20378368/99489838-f31f6700-29ab-11eb-8629-e8a91411307d.PNG" width="90%"></img>
 
 # Rainbow - Packet
@@ -85,7 +85,7 @@ sudo ./packet wlan1 50:50:A4:0E:16:90
 <img src="https://user-images.githubusercontent.com/58834907/97774846-a0b60c00-1b9e-11eb-8aa7-966a3d615e45.PNG" width="90%"></img>
 
 
-- parser.cpp 내부의 curl을 이용해 감지될 때마다 AWS RDS와 연동
+- **parser.cpp 내부의 curl을 이용해 감지될 때마다 AWS RDS와 연동**
 ```
 CURL *curl;
 CURLcode res;
