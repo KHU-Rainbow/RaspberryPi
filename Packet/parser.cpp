@@ -103,7 +103,7 @@ void parsing(const u_char* packet, char* node_mac, char* my_device_mac){
             struct curl_slist *headerlist = nullptr;
             headerlist = curl_slist_append(headerlist, "Content-Type: application/json");
 
-            strTargetURL = "https://r89kbtj8x9.execute-api.us-east-1.amazonaws.com/dev/rainbow-post-detect";
+            strTargetURL = "https://r89kbtj8x9.execute-api.us-east-1.amazonaws.com/dev/detect";
             strResourceJSON = "{\"Packet_date\": \"" + s_today + "\", " + "\"Packet_time\": \"" + std::to_string(p_data) +"\"}";
             
             curl_global_init(CURL_GLOBAL_ALL);
