@@ -139,6 +139,7 @@ int main()
                 softToneWrite(BP, melody[4]);
                 delay(250);
                 softToneWrite(BP, 0);
+                printf("\nDistance: %8.4f, %8.4f, %8.4f, %8.4f, %8.4f", f1, f2, f3, f4, f5);
             }
         }
 
@@ -160,6 +161,7 @@ int main()
                 json_object_set_number(rootObject, "Study_time", s_data);
 
                 //Send Data to Cloud Service
+                printf("\nDistance: %8.4f, %8.4f, %8.4f, %8.4f, %8.4f", f1, f2, f3, f4, f5);
                 printf("\nSTUDY_DATE: %s", today);
                 printf("\nSTUDY_TIME: %d\n\n", s_data);
 
@@ -170,6 +172,8 @@ int main()
                 json_object_set_string(rootObject, "Study_date", tomorrow);
                 // 객체에 키를 추가하고 공부시간 저장
                 json_object_set_number(rootObject, "Study_time", 0);
+                json_object_set_number(rootObject, "Study_goal", 0);
+                json_object_set_number(rootObject, "Study_achieved", 0);
 
                 // JSON_Value를 사람이 읽기 쉬운 문자열(pretty)로 만든 뒤 파일에 저장
                 json_serialize_to_file_pretty(rootValue, "tomorrow.json");
